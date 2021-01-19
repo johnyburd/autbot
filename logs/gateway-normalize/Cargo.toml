@@ -1,0 +1,48 @@
+[package]
+name = "logs-gateway-normalize"
+version = "0.1.0"
+authors = ["Joseph Azevedo <joseph.az@gatech.edu>"]
+edition = "2018"
+description = """\
+Normalizes Gateway events from the RabbitMQ queue and consumes them,\
+submitting them to the submission service for eventual insertion into the logs store\
+"""
+license = "MIT"
+
+[dependencies]
+gateway-queue-lib = { package = "logs-gateway-queue-lib", path = "../gateway-queue-lib" }
+architus-id = { path = "../../lib/id-rs" }
+architus-config-backoff = { path = "../../lib/config-backoff-rs" }
+config = "0.10"
+log = "0.4"
+env_logger = "0.8"
+static_assertions = "1.1"
+lazy_static = "1.4"
+anyhow = "1.0"
+thiserror = "1.0.22"
+tonic = "0.3"
+prost = "0.6"
+futures = "0.3"
+# Using tokio v2 because twilight and tonic use it
+tokio = { version = "0.2", features = ["rt-core", "rt-threaded", "macros"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+serde-humantime = "0.1"
+rmp-serde = "0.15"
+twilight-gateway = { git = "https://github.com/jazevedo620/twilight", branch = "combined-temp" }
+twilight-model = { git = "https://github.com/jazevedo620/twilight", branch = "combined-temp" }
+twilight-http = { git = "https://github.com/jazevedo620/twilight", branch = "combined-temp" }
+twilight-cache-inmemory = { git = "https://github.com/jazevedo620/twilight", branch = "combined-temp" }
+backoff = { version = "0.2", features = ["tokio"] }
+chrono = "0.4"
+lapin = "1.6"
+tokio-amqp = "0.2"
+reqwest = { version = "0.10", features = ["json"] }
+
+[dependencies.jmespath]
+git = "https://github.com/jmespath/jmespath.rs"
+features = ["sync"]
+
+[build-dependencies]
+tonic-build = "0.3"
+anyhow = "1.0"

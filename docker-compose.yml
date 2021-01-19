@@ -108,5 +108,77 @@ services:
       - webnet
     env_file:
       - architus.env
+  logs-gateway-ingress:
+    image: jazevedo6/logs-gateway-ingress:${TAG:-latest}
+    build:
+      context: ./
+      dockerfile: ./logs/gateway-ingress/Dockerfile
+    command: /opt/config.toml
+    volumes:
+      - type: bind
+        source: ./logs/gateway-ingress/config.default.toml
+        target: /opt/config.toml
+    depends_on:
+      - rabbit
+      - feature-gate
+      - logs-uptime
+    networks:
+      - webnet
+    env_file:
+      - architus.env
+    environment:
+      RUST_LOG: "info"
+  logs-gateway-normalize:
+    image: jazevedo6/logs-gateway-normalize:${TAG:-latest}
+    build:
+      context: ./
+      dockerfile: ./logs/gateway-normalize/Dockerfile
+    command: /opt/config.toml
+    volumes:
+      - type: bind
+        source: ./logs/gateway-normalize/config.default.toml
+        target: /opt/config.toml
+    depends_on:
+      - rabbit
+    networks:
+      - webnet
+    env_file:
+      - architus.env
+    environment:
+      RUST_LOG: "info"
+  logs-submission:
+    image: jazevedo6/logs-submission:${TAG:-latest}
+    build:
+      context: ./
+      dockerfile: ./logs/submission/Dockerfile
+    command: /opt/config.toml
+    volumes:
+      - type: bind
+        source: ./logs/submission/config.default.toml
+        target: /opt/config.toml
+    depends_on:
+      - rabbit
+    networks:
+      - webnet
+    env_file:
+      - architus.env
+    environment:
+      RUST_LOG: "info"
+  logs-uptime:
+    image: jazevedo6/logs-uptime:${TAG:-latest}
+    build:
+      context: ./
+      dockerfile: ./logs/uptime/Dockerfile
+    command: /opt/config.toml
+    volumes:
+      - type: bind
+        source: ./logs/uptime/config.default.toml
+        target: /opt/config.toml
+    networks:
+      - webnet
+    env_file:
+      - architus.env
+    environment:
+      RUST_LOG: "info"
 networks:
   webnet:
